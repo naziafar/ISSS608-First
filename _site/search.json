@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "ISSS608-First",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Hi, this is Nazia’s Visual Analytics Course website! You’ll find all my coursework here.\nAs I progress further in the course, there will be more additions and customizations to the site, so stay tuned!"
   },
   {
     "objectID": "about.html",
@@ -18,13 +18,188 @@
     "href": "HE01.html",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "This is my first attempt to create the coursework website.\n\n\n\npacman::p_load(tidyverse)"
+    "text": "This exerecise gives an overview of the basic principles and essential components of ggplot2. Upon completion of the exercise, you would have learned about the important graphical elements provided by ggplot2 that lets you create aesthetic yet functional statistical graphics."
   },
   {
     "objectID": "HE01.html#getting-started",
     "href": "HE01.html#getting-started",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "pacman::p_load(tidyverse)"
+    "text": "pacman::p_load(tidyverse)\n\n\nexam_data &lt;- read_csv(\"data/data/Exam_data.csv\")"
+  },
+  {
+    "objectID": "HE01.html#introducing-ggplot",
+    "href": "HE01.html#introducing-ggplot",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "ggplot2 is an R package for declaratively creating data-driven graphics based on The Grammar of Graphics.\nIt is also part of the tidyverse family specially designed for visual exploration and communication.\n\nR Graphicsggplot2\n\n\n\nhist(exam_data$MATHS)"
+  },
+  {
+    "objectID": "HE01.html#section",
+    "href": "HE01.html#section",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "hist(exam_data$MATHS)"
+  },
+  {
+    "objectID": "HE01.html#installing-and-loading-the-required-libraries",
+    "href": "HE01.html#installing-and-loading-the-required-libraries",
+    "title": "Hands-on Exercise 1",
+    "section": "2.1 Installing and loading the required libraries",
+    "text": "2.1 Installing and loading the required libraries\nBefore we begin the exercise, we need to install R packages.\nThe code chunk below assumes that you already have pacman package installed.\n\npacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "HE01.html#importing-data",
+    "href": "HE01.html#importing-data",
+    "title": "Hands-on Exercise 1",
+    "section": "2.2 Importing data",
+    "text": "2.2 Importing data\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package (readr is one of the tidyverse packages).\n\nexam_data &lt;- read_csv(\"data/data/Exam_data.csv\")"
+  },
+  {
+    "objectID": "HE01.html#r-graphics-vs-ggplot",
+    "href": "HE01.html#r-graphics-vs-ggplot",
+    "title": "Hands-on Exercise 1",
+    "section": "R Graphics VS ggplot",
+    "text": "R Graphics VS ggplot\nLet’s look at the difference between R Graphics (the core graphical functions of R Graphics) and ggplot by plotting a simple histogram.\n\nR Graphicsggplot2\n\n\n\nhist(exam_data$MATHS)\n\n\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, aes(x = MATHS)) +\n  geom_histogram(bins=10, \n                 boundary = 100,\n                 color=\"black\", \n                 fill=\"grey\") +\n  ggtitle(\"Distribution of Maths scores\")\n\n\n\n\n\n\n\n\n\n\n\nEven though the code chunk for gglplot is more complicated, it is preferred over R Graphics due to the following reason stated by Hadley Wickham\n“The transferable skills from ggplot2 are not the idiosyncrasies of plotting syntax, but a powerful way of thinking about visualisation, as a way of mapping between variables and the visual properties of geometric objects that you can perceive.”"
+  },
+  {
+    "objectID": "HE01.html#a-layered-grammar-of-graphics",
+    "href": "HE01.html#a-layered-grammar-of-graphics",
+    "title": "Hands-on Exercise 1",
+    "section": "4.1 A Layered Grammar of Graphics",
+    "text": "4.1 A Layered Grammar of Graphics\nggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics.  There are seven grammars of ggplot2, as seen in the image and described below:\n\nData: The dataset being plotted.\nAesthetics take attributes of the data and use them to influence visual characteristics, such as position, colours, size, shape, or transparency.\nGeometrics: The visual elements used for our data, such as point, bar or line.\nFacets split the data into subsets to create multiple variations of the same graph (paneling, multiple plots).\nStatistics, statiscal transformations that summarise data (e.g. mean, confidence intervals).\nCoordinate systems define the plane on which data are mapped on the graphic.\nThemes modify all non-data components of a plot, such as main title, sub-title, y-aixs title, or legend background."
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_bar",
+    "href": "HE01.html#geometric-objects-geom_bar",
+    "title": "Hands-on Exercise 1",
+    "section": "7.1 Geometric Objects: geom_bar",
+    "text": "7.1 Geometric Objects: geom_bar"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_dotplot",
+    "href": "HE01.html#geometric-objects-geom_dotplot",
+    "title": "Hands-on Exercise 1",
+    "section": "7.2 Geometric Objects: geom_dotplot",
+    "text": "7.2 Geometric Objects: geom_dotplot\nIn a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(dotsize = 0.5)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarningBe warned\n\n\n\nThe y scale is not very useful, and is very misleading.\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe code chunk below performs the following two steps:\nscale_y_continuous() is used to turn off the y-axis, and\nbinwidth argument is used to change the binwidth to 2.5.\n\n\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot(binwidth=2.5,         \n               dotsize = 0.5) +      \n  scale_y_continuous(NULL,           \n                     breaks = NULL)"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_histogram",
+    "href": "HE01.html#geometric-objects-geom_histogram",
+    "title": "Hands-on Exercise 1",
+    "section": "7.3 Geometric Objects: geom_histogram()",
+    "text": "7.3 Geometric Objects: geom_histogram()\nThe below code creates a simple histogram by using values in MATHS field of exam_data.\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_histogram()\n\n\n\n\n\n\n\n\nNote that the default bin is 30."
+  },
+  {
+    "objectID": "HE01.html#modifying-a-geometric-object-by-changing-geom",
+    "href": "HE01.html#modifying-a-geometric-object-by-changing-geom",
+    "title": "Hands-on Exercise 1",
+    "section": "7.4 Modifying a geometric object by changing geom()",
+    "text": "7.4 Modifying a geometric object by changing geom()\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20,            \n                 color=\"black\",      \n                 fill=\"light blue\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIn the code chunk above,\nbins argument is used to change the number of bins to 20,\nfill argument is used to shade the histogram with light blue color, and\ncolor argument is used to change the outline colour of the bars in black"
+  },
+  {
+    "objectID": "HE01.html#modifying-a-geometric-object-by-changing-aes",
+    "href": "HE01.html#modifying-a-geometric-object-by-changing-aes",
+    "title": "Hands-on Exercise 1",
+    "section": "7.5 Modifying a geometric object by changing aes()",
+    "text": "7.5 Modifying a geometric object by changing aes()\nThe below code allows you to change the interior colour of the histogram (i.e. fill) by using sub-group of aesthetic().\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           fill = GENDER)) +\n  geom_histogram(bins=20, \n                 color=\"grey30\")"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom-density",
+    "href": "HE01.html#geometric-objects-geom-density",
+    "title": "Hands-on Exercise 1",
+    "section": "7.6 Geometric Objects: geom-density()",
+    "text": "7.6 Geometric Objects: geom-density()\ngeom-density() computes and plots kernel density estimate, which is a smoothed version of the histogram.\nThe code below plots the distribution of Maths scores in a kernel density estimate plot.\n\nggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_density()\n\n\n\n\n\n\n\n\nThe code chunk below plots two kernel density lines by using colour or fill arguments of aes()\n\nggplot(data=exam_data, \n       aes(x = MATHS, \n           colour = GENDER)) +\n  geom_density()"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_boxplot",
+    "href": "HE01.html#geometric-objects-geom_boxplot",
+    "title": "Hands-on Exercise 1",
+    "section": "7.7 Geometric Objects: geom_boxplot",
+    "text": "7.7 Geometric Objects: geom_boxplot\nIt displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.\n\nggplot(data=exam_data, \n       aes(y = MATHS,       \n           x= GENDER)) +    \n  geom_boxplot()    \n\n\n\n\n\n\n\n\nNotches are used in box plots to help visually assess whether the medians of distributions differ. If the notches do not overlap, this is evidence that the medians are different.\nThe code chunk below plots the distribution of Maths scores by gender in notched plot instead of boxplot.\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot(notch=TRUE)"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_violin",
+    "href": "HE01.html#geometric-objects-geom_violin",
+    "title": "Hands-on Exercise 1",
+    "section": "7.8 Geometric Objects: geom_violin",
+    "text": "7.8 Geometric Objects: geom_violin\nViolin plots are a way of comparing multiple data distributions. It makes it easier to compare several distributions since they are placed side by side.\nThe code below plot the distribution of Maths score by gender in violin plot.\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_violin()"
+  },
+  {
+    "objectID": "HE01.html#geometric-objects-geom_point",
+    "href": "HE01.html#geometric-objects-geom_point",
+    "title": "Hands-on Exercise 1",
+    "section": "7.9 Geometric Objects: geom_point()",
+    "text": "7.9 Geometric Objects: geom_point()\nThe code chunk below plots a scatterplot showing the Maths and English grades of pupils by using geom_point()\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point()"
+  },
+  {
+    "objectID": "HE01.html#geom-objects-can-be-combined",
+    "href": "HE01.html#geom-objects-can-be-combined",
+    "title": "Hands-on Exercise 1",
+    "section": "7.10 geom objects can be combined",
+    "text": "7.10 geom objects can be combined\nBelow is an example of combining geom objects. The code chunk below plots the data points on the boxplots by using both geom_boxplot() and geom_point().\n\nggplot(data=exam_data, \n       aes(y = MATHS, \n           x= GENDER)) +\n  geom_boxplot() +                    \n  geom_point(position=\"jitter\", \n             size = 0.5)"
+  },
+  {
+    "objectID": "HE01.html#working-with-stat",
+    "href": "HE01.html#working-with-stat",
+    "title": "Hands-on Exercise 1",
+    "section": "8.1 Working with stat()",
+    "text": "8.1 Working with stat()\nThe boxplots below are incomplete because the positions of the means were not shown.\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot()"
+  },
+  {
+    "objectID": "HE01.html#working-with-stat---the-stat_summary-method",
+    "href": "HE01.html#working-with-stat---the-stat_summary-method",
+    "title": "Hands-on Exercise 1",
+    "section": "8.2 Working with stat - the stat_summary() method",
+    "text": "8.2 Working with stat - the stat_summary() method\nThe code chunk below adds mean values by using the stat_summary() function and overriding the default geom.\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",       \n               fun = \"mean\",         \n               colour =\"red\",        \n               size=4)"
+  },
+  {
+    "objectID": "HE01.html#working-with-stat---the-geom-method",
+    "href": "HE01.html#working-with-stat---the-geom-method",
+    "title": "Hands-on Exercise 1",
+    "section": "8.3 Working with stat - the geom() method",
+    "text": "8.3 Working with stat - the geom() method\nThe code chunk below adds mean values by using geom_() function and overriding the default stat.\n\nggplot(data=exam_data, \n       aes(y = MATHS, x= GENDER)) +\n  geom_boxplot() +\n  geom_point(stat=\"summary\",        \n             fun=\"mean\",           \n             colour=\"red\",          \n             size=4)"
+  },
+  {
+    "objectID": "HE01.html#adding-a-best-fit-curve-on-a-scatterplot",
+    "href": "HE01.html#adding-a-best-fit-curve-on-a-scatterplot",
+    "title": "Hands-on Exercise 1",
+    "section": "8.4 Adding a best fit curve on a scatterplot?",
+    "text": "8.4 Adding a best fit curve on a scatterplot?\nThe scatterplot below shows the relationship of Maths and English grades of pupils.\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() \n\n\n\n\n\n\n\n\nThe interpretability of this graph can be improved by adding a best fit curve. geom_smooth() is used to plot a best fit curve on the scatterplot.\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(size=0.5)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nThe default method used is loess.\n\n\n\nThe default smoothing method can be overridden as shown below.\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              linewidth=0.5)"
+  },
+  {
+    "objectID": "HE01.html#working-with-facet_wrap",
+    "href": "HE01.html#working-with-facet_wrap",
+    "title": "Hands-on Exercise 1",
+    "section": "9.1 Working with facet_wrap()",
+    "text": "9.1 Working with facet_wrap()\nIt wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.\nThe code chunk below plots a trellis plot using facet_wrap():\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_wrap(~ CLASS)"
+  },
+  {
+    "objectID": "HE01.html#facet_grid-function",
+    "href": "HE01.html#facet_grid-function",
+    "title": "Hands-on Exercise 1",
+    "section": "9.2 facet_grid() function",
+    "text": "9.2 facet_grid() function\nIt forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.\n\nggplot(data=exam_data, \n       aes(x= MATHS)) +\n  geom_histogram(bins=20) +\n    facet_grid(~ CLASS)"
+  },
+  {
+    "objectID": "HE01.html#working-with-coordinate",
+    "href": "HE01.html#working-with-coordinate",
+    "title": "Hands-on Exercise 1",
+    "section": "10.1 Working with Coordinate",
+    "text": "10.1 Working with Coordinate\nBy default, the bar chart of ggplot2 is in vertical form.\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n\nThe code chunk below flips the horizontal bar chart into vertical bar chart by using coord_flip().\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()"
+  },
+  {
+    "objectID": "HE01.html#changing-the-y--and-x-axis-range",
+    "href": "HE01.html#changing-the-y--and-x-axis-range",
+    "title": "Hands-on Exercise 1",
+    "section": "10.2 Changing the y- and x-axis range",
+    "text": "10.2 Changing the y- and x-axis range\nThe scatterplot below is slightly misleading because the y-aixs and x-axis range are not equal.\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\n\n\n\n\n\n\n\nThe code chunk below fixes the y-axis and x-axis range from 0 to 100.\n\nggplot(data=exam_data, \n       aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))"
+  },
+  {
+    "objectID": "HE01.html#working-with-theme",
+    "href": "HE01.html#working-with-theme",
+    "title": "Hands-on Exercise 1",
+    "section": "11.1 Working with theme",
+    "text": "11.1 Working with theme\nThe code chunk below plots a horizontal bar chart using theme_gray().\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\n\n\n\n\n\n\n\nA horizontal bar chart plotted using theme_classic():\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\n\n\n\n\n\n\n\nA horizontal bar chart plotted using theme_minimal():\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()"
   }
 ]
