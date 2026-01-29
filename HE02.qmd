@@ -1,5 +1,6 @@
 ---
-title: "Hands-on Exercise 2 - Beyond ggplot2 Fundamentals"
+title: "Hands-on Exercise 2"
+subtitle: "<strong style='font-size:1.6rem;'>Beyond ggplot2 Fundamentals</strong>"
 author: "Nazia Faruqui"
 date: "January 22, 2026"
 date-modified: "last-modified"
@@ -73,6 +74,8 @@ One of the challenges in plotting statistical graphs is annotation, especially w
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
@@ -119,6 +122,8 @@ We simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
@@ -161,6 +166,8 @@ ggplot2 comes with eight [built-in themes](https://ggplot2.tidyverse.org/referen
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data,
 aes(x = MATHS)) +
 geom_histogram(bins=20,
@@ -199,6 +206,8 @@ Below, we're looking at an example where *The Economist* theme is used.
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
              aes(x = MATHS)) +
   geom_histogram(bins=20, 
@@ -235,6 +244,8 @@ It also provides some extra geoms and scales for **ggplot2**. Consult [this vign
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
              aes(x = MATHS)) +
   geom_histogram(bins=20, 
@@ -267,6 +278,8 @@ The second goal centers around productivity for a production workflow. In fact, 
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
              aes(x = MATHS)) +
   geom_histogram(bins=20, 
@@ -317,6 +330,8 @@ First, let us create three statistical graphics by using the code chunk below.
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_histogram(bins=20, 
@@ -349,6 +364,8 @@ Next
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
        aes(x = ENGLISH)) +
   geom_histogram(bins=20, 
@@ -381,6 +398,8 @@ Lastly, we will draw a scatterplot for English score versus Math score as shown 
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
@@ -429,6 +448,8 @@ Figure in the tabset below shows a composite of two histograms created using pat
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 p1 + p2
 ```
 
@@ -455,7 +476,8 @@ We can plot more complex composite figures by using appropriate operators. For e
 
 ```{r}
 #| echo: false
-#| fig-width: 10
+#| fig-width: 13
+#| fig-height: 6
 (p1 / p2) | p3
 ```
 
@@ -478,7 +500,8 @@ In order to identify subplots in text, patchwork also provides auto-tagging capa
 
 ```{r}
 #| echo: false
-#| fig-width: 10
+#| fig-width: 13
+#| fig-height: 6
 ((p1 / p2) | p3) + 
   plot_annotation(tag_levels = 'I')
 ```
@@ -501,6 +524,8 @@ Besides providing functions to place plots next to each other based on the provi
 
 ```{r}
 #| echo: false
+#| fig-width: 13
+#| fig-height: 6
 p3 + inset_element(p2, 
                    left = 0.02, 
                    bottom = 0.7, 
@@ -529,6 +554,7 @@ Below we are creating a figure by combining **patchwork** and **The Economist th
 
 ```{r}
 #| echo: false
+#| fig-height: 6
 #| fig-width: 13
 patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
@@ -545,7 +571,7 @@ patchwork & theme_economist()
 
 # 6. References
 
--   Kam, T.S. (2023). [**A Layered Grammar of Graphics: ggplot2 methods**](https://r4va.netlify.app/chap01).
+-   Kam, T.S. (2023). [Beyond ggplot2 Fundamentals](https://r4va.netlify.app/chap02).
 
 -   [Patchwork R package goes nerd viral](https://www.littlemissdata.com/blog/patchwork)
 
