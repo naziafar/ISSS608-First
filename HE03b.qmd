@@ -23,7 +23,7 @@ When telling a visually-driven data story, animated graphics tend to attract the
 
 When creating animations, the plot does not actually move. Instead, many individual plots are built and then stitched together as movie frames, just like an old-school flip book or cartoon. Each frame is a different plot when conveying motion, which is built using some relevant subset of the aggregate data. The subset drives the flow of the animation when stitched back together.
 
-![](images/clipboard-1859662484.png)
+![](image5.jpg)
 
 ## Terminology
 
@@ -46,7 +46,7 @@ Before you start making animated graphs, you should first ask yourself: Does it 
 First, we write the code to check, install and launch the following R packages:
 
 | Package | Description |
-|:-----------------------|:-----------------------------------------------|
+|:-----------------------|:----------------------------------------------|
 | [**plotly**](https://plotly.com/r/) | R library for plotting interactive statistical graphs. |
 | [**gganimate**](https://gganimate.com/) | ggplot extension for creating animated statistical graphs. |
 | [**gifski**](https://cran.r-project.org/web/packages/gifski/index.html) | converts video frames to GIF animations using pngquant’s fancy features for efficient cross-frame palettes and temporal dithering. It produces animated GIFs that use thousands of colors per frame. |
@@ -116,7 +116,7 @@ glimpse(globalPop)
 [**gganimate**](https://gganimate.com/) extends the grammar of graphics as implemented by ggplot2 to include the description of animation. It does this by providing a range of new grammar classes that can be added to the plot object in order to customise how it should change with time.
 
 | Arguments | Description |
-|:------------------------|:----------------------------------------------|
+|:------------------------|:---------------------------------------------|
 | `transition_*()` | defines how the data should be spread out and how it relates to itself across time. |
 | `view_*()` | defines how the positional scales should change along the animation. |
 | `shadow_*()` | defines how data from other points in time should be presented in the given point in time. |
