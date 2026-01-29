@@ -1,0 +1,1 @@
+This repository is part of my coursework for the module Visual Analytics and Applications at Singapore Management University. It documents my learning through hands-on exercises and will continue to be updated with further work throughout the course.
