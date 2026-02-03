@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "ISSS608-First",
+    "title": "Visual Analytics and Applications Coursework",
     "section": "",
     "text": "Hi, this is Nazia’s Visual Analytics Course website! You’ll find all my coursework here.\nAs I progress further in the course, there will be more additions and customizations to the site."
   },
@@ -998,14 +998,14 @@
     "href": "exercises/HE04b.html#significant-test-of-correlation-ggscatterstats",
     "title": "Hands-on Exercise 4b",
     "section": "3.6 Significant Test of Correlation: ggscatterstats()",
-    "text": "3.6 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE,\n  )"
+    "text": "3.6 Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Math scores and English scores.\n\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE,\n  )"
   },
   {
     "objectID": "exercises/HE04b.html#significant-test-of-association-depedence-ggbarstats-methods",
     "href": "exercises/HE04b.html#significant-test-of-association-depedence-ggbarstats-methods",
     "title": "Hands-on Exercise 4b",
     "section": "3.7 Significant Test of Association (Depedence) : ggbarstats() methods",
-    "text": "3.7 Significant Test of Association (Depedence) : ggbarstats() methods\nIn the code chunk below, the Maths scores is binned into a 4-class variable by using cut().\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nIn this code chunk below ggbarstats() is used to build a visual for Significant Test of Association\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
+    "text": "3.7 Significant Test of Association (Depedence) : ggbarstats() methods\nIn the code chunk below, the Math scores are binned into a 4-class variable by using cut().\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nIn the code chunk below ggbarstats() is used to build a visual for Significant Test of Association\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
   },
   {
     "objectID": "exercises/HE04c.html",
@@ -1019,7 +1019,7 @@
     "href": "exercises/HE04c.html#plotting-standard-error-bars-of-point-estimates",
     "title": "Hands-on Exercise 4c",
     "section": "3.1 Plotting standard error bars of point estimates",
-    "text": "3.1 Plotting standard error bars of point estimates\nNow we are ready to plot the standard error bars of mean maths score by race as shown below.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=RACE, \n        ymin=mean-se, \n        ymax=mean+se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  ggtitle(\"Standard error of mean maths score by race\")\n\n\n\n\n\n\n\nTipThings to learn from the code chunk above\n\n\n\n\nThe error bars are computed by using the formula mean+/-se.\nFor geom_point(), it is important to indicate stat=“identity”."
+    "text": "3.1 Plotting standard error bars of point estimates\nNow we are ready to plot the standard error bars of mean math score by race as shown below.\n\nThe plotThe code chunk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(my_sum) +\n  geom_errorbar(\n    aes(x=RACE, \n        ymin=mean-se, \n        ymax=mean+se), \n    width=0.2, \n    colour=\"black\", \n    alpha=0.9, \n    linewidth=0.5) +\n  geom_point(aes\n           (x=RACE, \n            y=mean), \n           stat=\"identity\", \n           color=\"red\",\n           size = 1.5,\n           alpha=1) +\n  ggtitle(\"Standard error of mean maths score by race\")\n\n\n\n\n\n\n\nTipThings to learn from the code chunk above\n\n\n\n\nThe error bars are computed by using the formula mean +/- se.\nFor geom_point(), it is important to indicate stat=“identity”."
   },
   {
     "objectID": "exercises/HE04c.html#plotting-confidence-interval-of-point-estimates",
@@ -1082,7 +1082,7 @@
     "href": "exercises/HE04d.html#funnelplotr-methods-makeover-1",
     "title": "Hands-on Exercise 4d",
     "section": "3.2 FunnelPlotR methods: Makeover 1",
-    "text": "3.2 FunnelPlotR methods: Makeover 1\nThe code chunk below plots a funnel plot.\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",     #&lt;&lt;\n  xrange = c(0, 6500),  #&lt;&lt;\n  yrange = c(0, 0.05)   #&lt;&lt;\n)\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\nThings to learn from the code chunk above.\n\n data_type argument is used to change from default “SR” to “PR” (i.e. proportions).\n xrange and yrange are used to set the range of x-axis and y-axis."
+    "text": "3.2 FunnelPlotR methods: Makeover 1\nThe code chunk below plots a funnel plot.\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",     #&lt;&lt;\n  xrange = c(0, 6500),  #&lt;&lt;\n  yrange = c(0, 0.05)   #&lt;&lt;\n)\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\nThings to learn from the code chunk above:\n\n data_type argument is used to change from default “SR” to “PR” (i.e. proportions).\n xrange and yrange are used to set the range of x-axis and y-axis."
   },
   {
     "objectID": "exercises/HE04d.html#funnelplotr-methods-makeover-2",
@@ -1122,7 +1122,7 @@
   {
     "objectID": "index.html#quick-links",
     "href": "index.html#quick-links",
-    "title": "ISSS608-First",
+    "title": "Visual Analytics and Applications Coursework",
     "section": "Quick Links",
     "text": "Quick Links\n\n\n\n\n\n\n\n\nIn-class Exercise 1\nIntro to Tableau\nIn-class Exercise 2\nPareto Chart on Tableau\nIn-class Exercise 3\nLollipop Chart on Tableau"
   }
