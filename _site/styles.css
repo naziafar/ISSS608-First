@@ -1,1 +1,48 @@
 /* css styles */
+
+/* ===== Card-style table layout ===== */
+
+table {
+  border-collapse: separate;
+  border-spacing: 40px 26px; 
+}
+
+td {
+  background: white;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  transition: all .2s ease;
+}
+
+td:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 32px rgba(0,0,0,.12);
+}
+
+table img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+table figure{
+  margin:0;
+}
+
+table figcaption{
+  display:none;
+}
+
+table td{
+  padding-top:8px;
+}
+
+table a{
+  display:block;
+  width:100%;
+  height:100%;
+  text-decoration:none;
+  color:inherit;
+}

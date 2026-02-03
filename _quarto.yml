@@ -8,21 +8,34 @@ website:
     - text: "Hands-on Exercise"
       menu: 
       - text: "1. A Layered Grammar of Graphics: ggplot2 methods"
-        href: "HE01.html"
+        href: "exercises/HE01.html"
       - text: "2. Beyond ggplot2 Fundamentals"
-        href: "HE02.html"
+        href: "exercises/HE02.html"
       - text: "3a. Programming Interactive Data Visualisation with R"
-        href: "HE03.html"
+        href: "exercises/HE03.html"
       - text: "3b. Programming Animated Statistical Graphics with R"
-        href: "HE03b.html"  
+        href: "exercises/HE03b.html"
+      - text: "4a. Visualising Distribution"
+        href: "exercises/HE04a.html"
+      - text: "4b. Visual Statistical Analysis"
+        href: "exercises/HE04b.html"
+      - text: "4c. Visualising Uncertainty"
+        href: "exercises/HE04c.html"
+      - text: "4d. Funnel Plots for Fair Comparisons"
+        href: "exercises/HE04d.html"
     - text: "In-class Exercise"
       menu:
       - text: "In-class Exercise 1"
-        href: "IE01.html"
+        href: "https://public.tableau.com/app/profile/nazia.faruqui/viz/In-class_Ex01_17686351432730/Dashboard1"
+      - text: "In-class Exercise 2"
+        href: "https://public.tableau.com/app/profile/nazia.faruqui/viz/In-class_Ex02_17692383170620/Dashboard2"
+      - text: "In-class Exercise 3"
+        href: "https://public.tableau.com/app/profile/nazia.faruqui/viz/In-classExercise3_17698443972940/In-class_Ex03"
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About Me
 
 format:
   html:

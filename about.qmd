@@ -1,9 +1,15 @@
 ---
-title: "About"
+title: "About Me"
 ---
 
-About this site
+Hello! I’m Nazia Faruqui, currently pursuing a Master of IT in Business at Singapore Management University (SMU). My academic journey focuses on building expertise at the intersection of business, data, and technology, with a strong emphasis on transforming data into meaningful insights that support informed decision-making.
 
-```{r}
-1 + 1
-```
+This website serves as a portfolio of my work for the Visual Analytics and Applications course at SMU, where I apply analytical and visualisation techniques to explore complex datasets. Throughout this course, I use tools such as **R, Quarto, and Tableau** to develop interactive visualisations and communicate data-driven stories effectively.
+
+As part of my broader postgraduate curriculum, I have also developed foundational skills in **SQL and Python**, strengthening my ability to manage, analyse, and interpret data across different platforms.
+
+Prior to my postgraduate studies, I gained over a year of professional experience in banking operations in Australia. This experience sharpened my attention to detail, enhanced my problem-solving abilities, and sparked my interest in leveraging data to improve business processes. I am now focused on expanding my technical capabilities while cultivating a strong analytical mindset for data-driven roles.
+
+I am passionate about continuous learning and committed to growing into a thoughtful and impactful analytics professional.
+
+Thank you for visiting my website!

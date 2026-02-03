@@ -1,0 +1,487 @@
+---
+title: "Hands-on Exercise 4a"
+subtitle: "Visualising Distribution"
+author: "Nazia Faruqui"
+date: 2026-02-02
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# 1. Overview
+
+Visualising distribution is not new in statistical analysis. In hands-on exercise 1 we had looked at some of the popular statistical graphics methods for visualising distribution are histogram, probability density curve (pdf), boxplot, notch plot and violin plot and how they can be created by using ggplot2. In this chapter, we are going to look at two relatively new statistical graphic methods for visualising distribution, namely **ridgeline plot** and **raincloud plot** by using ggplot2 and its extensions.
+
+# 2. Getting Started
+
+::: panel-tabset
+## Installing and loading packages
+
+For the purpose of this exercise, the following R packages will be used. They are:
+
+-   ggridges, a ggplot2 extension specially designed for plotting ridgeline plots,
+
+-   ggdist, a ggplot2 extension spacially desgin for visualising distribution and uncertainty,
+
+-   tidyverse, a family of R packages to meet the modern data science and visual communication needs,
+
+-   ggthemes, a ggplot extension that provides the user additional themes, scales, and geoms for the ggplots package, and
+
+-   colorspace, an R package provides a broad toolbox for selecting individual colors or color palettes, manipulating these colors, and employing them in various kinds of visualisations.
+
+The code chunk below will be used to accomplish this task.
+
+```{r}
+pacman::p_load(ggdist, ggridges, ggthemes,
+               colorspace, tidyverse)
+```
+
+## Importing Data
+
+For the purpose of this exercise, *Exam_data.csv* will be used.
+
+In the code chunk below, [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) of [**readr**](https://readr.tidyverse.org/) package is used to import *Exam_data.csv* into R and saved it into a tibble dataframe.
+
+```{r}
+exam <- read_csv("../data/Exam_data.csv")
+```
+
+## Understanding the data
+
+```{r}
+summary(exam)
+```
+:::
+
+# 3. Visualising Distribution with Ridgeline Plot
+
+[*Ridgeline plot*](https://www.data-to-viz.com/graph/ridgeline.html) (sometimes called *Joyplot*) is a data visualisation technique for revealing the distribution of a numeric value for several groups. Distribution can be represented using histograms or density plots, all aligned to the same horizontal scale and presented with a slight overlap.
+
+Note:
+
+-   Ridgeline plots make sense when the number of groups to represent is moderate to large, because then a classic window separation would take up too much space. The overlapping format helps maximise space efficiency. However, if there are fewer than five groups, other types of distribution plots are generally more suitable.
+
+-   This type of plot is particularly useful when the data shows a clear pattern, such as a noticeable ranking among groups. Without such structure, the overlapping distributions may appear cluttered and make the visualisation difficult to interpret.
+
+## 3.1 Plotting ridgeline graph: ggridges method
+
+There are several ways to plot ridgeline plot with R. In this section, we will learn how to plot ridgeline plot by using [ggridges](https://wilkelab.org/ggridges/index.html) package.
+
+ggridges package provides two main geom to plot ridgeline plots, they are: [`geom_ridgeline()`](https://wilkelab.org/ggridges/reference/geom_ridgeline.html) and [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html). The first one takes height values directly to draw the ridgelines, while the second one first estimates the data densities and then draws those using ridgelines.
+
+The ridgeline plot below is plotted by using `geom_density_ridges()`.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = ENGLISH, 
+           y = CLASS)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = lighten("#7097BB", .3),
+    color = "white"
+  ) +
+  scale_x_continuous(
+    name = "English grades",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = ENGLISH, 
+           y = CLASS)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = lighten("#7097BB", .3),
+    color = "white"
+  ) +
+  scale_x_continuous(
+    name = "English grades",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+:::
+
+## 3.2 Varying fill colors along the x axis
+
+Sometimes we may want the area beneath a ridgeline to feature colors that change along the x-axis instead of a single solid shade. This effect can be achieved by using either [`geom_ridgeline_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html) or [`geom_density_ridges_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html). Both geoms work just like `geom_ridgeline()` and `geom_density_ridges()`, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. Due to technical limitations, it is possible to use either changing fill colors or transparency, but not both simultaneously.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = ENGLISH, 
+           y = CLASS,
+           fill = stat(x))) +
+  geom_density_ridges_gradient(
+    scale = 3,
+    rel_min_height = 0.01) +
+  scale_fill_viridis_c(name = "Temp. [F]",
+                       option = "C") +
+  scale_x_continuous(
+    name = "English grades",
+    expand = c(0, 0)
+  ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = ENGLISH, 
+           y = CLASS,
+           fill = stat(x))) +
+  geom_density_ridges_gradient(
+    scale = 3,
+    rel_min_height = 0.01) +
+  scale_fill_viridis_c(name = "Temp. [F]",
+                       option = "C") +
+  scale_x_continuous(
+    name = "English grades",
+    expand = c(0, 0)
+  ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+:::
+
+## 3.3 Mapping the probabilities directly onto colour
+
+Beside providing additional geom objects to support the need to plot ridgeline plot, ggridges package also provides a stat function called [`stat_density_ridges()`](https://wilkelab.org/ggridges/reference/stat_density_ridges.html) that replaces [`stat_density()`](https://ggplot2.tidyverse.org/reference/geom_density.html) of ggplot2.
+
+The figure below is plotted by mapping the probabilities calculated by using `stat(ecdf)` which represents the empirical cumulative density function for the distribution of English score.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = 0.5 - abs(0.5-stat(ecdf)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", 
+                      calc_ecdf = TRUE) +
+  scale_fill_viridis_c(name = "Tail probability",
+                       direction = -1) +
+  theme_ridges()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = 0.5 - abs(0.5-stat(ecdf)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", 
+                      calc_ecdf = TRUE) +
+  scale_fill_viridis_c(name = "Tail probability",
+                       direction = -1) +
+  theme_ridges()
+```
+:::
+
+::: callout-important
+It is important include the argument `calc_ecdf = TRUE` in `stat_density_ridges()`.
+:::
+
+## 3.4 Ridgeline plots with quantile lines
+
+By using [`geom_density_ridges_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html), we can colour the ridgeline plot by quantile, via the calculated `stat(quantile)` aesthetic as shown in the figure below.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  theme_ridges()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  theme_ridges()
+```
+:::
+
+Instead of using numbers to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+    ) +
+  scale_fill_manual(
+    name = "Probability",
+    values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
+    labels = c("(0, 0.025]", "(0.025, 0.975]", "(0.975, 1]")
+  ) +
+  theme_ridges()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = CLASS, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+    ) +
+  scale_fill_manual(
+    name = "Probability",
+    values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
+    labels = c("(0, 0.025]", "(0.025, 0.975]", "(0.975, 1]")
+  ) +
+  theme_ridges()
+```
+:::
+
+# 4. Visualising Distribution with Raincloud Plot
+
+A raincloud plot is a data visualisation technique that shows a half-density distribution plot. It gets its name from the density curve, which resembles a “raincloud.” The half-density (raincloud) plot enhances the traditional box plot by emphasising multiple modalities, suggesting that different groups may be present. Unlike the box plot, which does not indicate where densities are concentrated, the raincloud plot clearly displays these clusters.
+
+In this section, we will learn how to create a raincloud plot to visualise the distribution of English scores by race. It will be created by using functions provided by **ggdist** and **ggplot2** packages.
+
+## 4.1 Plotting a Half Eye graph
+
+First, we will plot a Half-Eye graph by using [`stat_halfeye()`](https://mjskay.github.io/ggdist/reference/stat_halfeye.html) of **ggdist** package.
+
+This produces a Half Eye visualization, which contains a half-density and a slab-interval.
+
+:::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA)
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA)
+```
+
+::: callout-tip
+## Things to learn from the code chunk above
+
+We remove the slab interval by setting .width = 0 and point_colour = NA. Take note that it's .width and not just width (because it is a special computed variable name used internally by ggdist stats like stat_halfeye). The dot helps distinguish it from regular aesthetic mappings such as width, color, or fill.
+:::
+::::
+
+## 4.2 Adding the boxplot with **`geom_boxplot()`**
+
+Next, we will add the second geometry layer using [`geom_boxplot()`](https://r4va.netlify.app/chap09) of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA)
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA)
+```
+:::
+
+## 4.3 Adding the Dot Plots with `stat_dots()`
+
+Next, we will add the third geometry layer using [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html) of ggdist package. This produces a half-dotplot, which is similar to a histogram that indicates the number of samples (number of dots) in each bin. We select side = “left” to indicate that we want it on the left-hand side.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 2)
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 2)
+```
+:::
+
+## 4.4 Finishing Touch
+
+Lastly, [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html) of ggplot2 package will be used to flip the raincloud chart horizontally to give it the raincloud appearance. At the same time, `theme_economist()` of ggthemes package is used to give the raincloud chart a professional publishing standard look.
+
+::: panel-tabset
+### The plot
+
+```{r}
+#| echo: false
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  coord_flip() +
+  theme_economist()
+```
+
+### The code chunk
+
+```{r fig.show='hide'}
+#| results: hide
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  coord_flip() +
+  theme_economist()
+```
+:::
+
+# 5. References
+
+-   Kam, T.S. (2023). [Visualing Distribution](https://r4va.netlify.app/chap09).
+
+-   [Introducing Ridgeline Plots (formerly Joyplots)](https://blog.revolutionanalytics.com/2017/07/joyplots.html)
+
+-   Claus O. Wilke [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/) especially Chapter [6](https://clauswilke.com/dataviz/visualizing-amounts.html), [7](https://clauswilke.com/dataviz/histograms-density-plots.html), [8](https://clauswilke.com/dataviz/ecdf-qq.html), [9](https://clauswilke.com/dataviz/boxplots-violins.html) and [10](https://clauswilke.com/dataviz/visualizing-proportions.html).
+
+-   Allen M, Poggiali D, Whitaker K et al. [“Raincloud plots: a multi-platform tool for robust data. visualization”](https://wellcomeopenresearch.org/articles/4-63) \[version 2; peer review: 2 approved\]. Welcome Open Res 2021, pp. 4:63.
+
+-   [Dots + interval stats and geoms](https://mjskay.github.io/ggdist/articles/dotsinterval.html)
