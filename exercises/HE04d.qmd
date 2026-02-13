@@ -193,7 +193,7 @@ dfCI <- data.frame(number.ll95, number.ul95, number.ll999,
                    number.ul999, number.seq, fit.mean)
 ```
 
-## 4.3 Plotting a static funnel plot 
+## 4.3 Plotting a static funnel plot
 
 In the code chunk below, ggplot2 functions are used to plot a static funnel plot.
 
