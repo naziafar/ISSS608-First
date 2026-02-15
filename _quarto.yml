@@ -41,6 +41,10 @@ website:
         href: "https://public.tableau.com/app/profile/nazia.faruqui/viz/In-class_Ex02_17692383170620/Dashboard2"
       - text: "In-class Exercise 3"
         href: "https://public.tableau.com/app/profile/nazia.faruqui/viz/In-classExercise3_17698443972940/In-class_Ex03"
+    - text: "Take-Home Exercise"
+      menu: 
+      - text: "Take-Home Exercise 1"
+        href: "exercises/THE01.html"
     right:
       - href: index.qmd
         text: Home
