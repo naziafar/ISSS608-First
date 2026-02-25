@@ -194,7 +194,7 @@ Then we can simply group the count by hour and wkday and plot it, since we know 
 
 ## 3.4 Plotting multiple calendar heatmaps
 
-**Challenge:** Building multiple heatmaps for the top four countries with the highest number of attacks.
+Task: Building multiple heatmaps for the top four countries with the highest number of attacks.
 
 **Step 1: Deriving attack by country object**
 
@@ -354,7 +354,7 @@ rice %>%
   mutate(Year = factor(Year)) %>%
   filter(Year %in% c(1961, 1980)) %>%
   newggslopegraph(Year, Yield, Country,
-                Title = "Rice Yield of Top 11 Asian Counties",
+                Title = "Rice Yield of Top 11 Asian Countries",
                 SubTitle = "1961-1980",
                 Caption = "Prepared by: Nazia Faruqui
                 Code from: Dr. Kam Tin Seong")
