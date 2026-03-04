@@ -35,6 +35,12 @@ website:
         href: "exercises/HE05e.html"
       - text: "6. Visualising and Analysing Time-Oriented Data"
         href: "exercises/HE06.html"
+      - text: "7a. Visualising and Analysing Geographical Data: Choropleth Mapping with R"
+        href: "exercises/HE07a.html"
+      - text: "7b. Visualising Geospatial Point Data"
+        href: "exercises/HE07b.html"
+      - text: "7c. Analytical Mapping"
+        href: "exercises/HE07c.html"
     - text: "In-class Exercise"
       menu:
       - text: "In-class Exercise 1"
