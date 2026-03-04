@@ -13,7 +13,25 @@ execute:
 
 # 1. Overview
 
+Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using area patterns or graduated colors. For example, a social scientist may need to use a choropleth map to portray the spatial distribution of aged population of Singapore by Master Plan 2014 Subzone Boundary.
+
+In this chapter, we will learn how to plot functional and truthful choropleth maps by using an R package called [tmap](https://r-tmap.github.io/tmap/) package.
+
 # 2. Getting Started
+
+In this hands-on exercise, the key R package we will use is [**tmap**](https://cran.r-project.org/web/packages/tmap/) package. Beside **tmap** package, four other R packages will be used. They are:
+
+-   [**readr**](https://readr.tidyverse.org/) for importing delimited text file,
+
+-   [**tidyr**](https://tidyr.tidyverse.org/) for tidying data,
+
+-   [**dplyr**](https://dplyr.tidyverse.org/) for wrangling data and
+
+-   [**sf**](https://cran.r-project.org/web/packages/sf/index.html) for handling geospatial data.
+
+Among the four packages, **readr**, **tidyr** and **dplyr** are part of **tidyverse** package.
+
+The code chunk below will be used to install and load these packages in RStudio.
 
 ```{r}
 pacman::p_load(sf, tmap, tidyverse)

@@ -345,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 4, 2026</p>
+      <p class="date-modified">March 5, 2026</p>
     </div>
   </div>
     
@@ -358,9 +358,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level1">
 <h1>1. Overview</h1>
+<p>Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using area patterns or graduated colors. For example, a social scientist may need to use a choropleth map to portray the spatial distribution of aged population of Singapore by Master Plan 2014 Subzone Boundary.</p>
+<p>In this chapter, we will learn how to plot functional and truthful choropleth maps by using an R package called <a href="https://r-tmap.github.io/tmap/">tmap</a> package.</p>
 </section>
 <section id="getting-started" class="level1">
 <h1>2. Getting Started</h1>
+<p>In this hands-on exercise, the key R package we will use is <a href="https://cran.r-project.org/web/packages/tmap/"><strong>tmap</strong></a> package. Beside <strong>tmap</strong> package, four other R packages will be used. They are:</p>
+<ul>
+<li><p><a href="https://readr.tidyverse.org/"><strong>readr</strong></a> for importing delimited text file,</p></li>
+<li><p><a href="https://tidyr.tidyverse.org/"><strong>tidyr</strong></a> for tidying data,</p></li>
+<li><p><a href="https://dplyr.tidyverse.org/"><strong>dplyr</strong></a> for wrangling data and</p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/sf/index.html"><strong>sf</strong></a> for handling geospatial data.</p></li>
+</ul>
+<p>Among the four packages, <strong>readr</strong>, <strong>tidyr</strong> and <strong>dplyr</strong> are part of <strong>tidyverse</strong> package.</p>
+<p>The code chunk below will be used to install and load these packages in RStudio.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, tmap, tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -998,24 +1009,31 @@ Note
 <section id="by-creating-multiple-stand-alone-maps-with-tmap_arrange" class="level3">
 <h3 class="anchored" data-anchor-id="by-creating-multiple-stand-alone-maps-with-tmap_arrange">4.6.3 By creating multiple stand-alone maps with <code>tmap_arrange()</code></h3>
 <p>In this example, multiple small choropleth maps are created by creating multiple stand-alone maps with <code>tmap_arrange()</code>.</p>
-<pre class="{#| fig-height: 8}"><code>#| fig-width: 13
-#| fig-align: center{r}
-youngmap &lt;- tm_shape(mpsz_pop2020)+ 
-  tm_polygons("YOUNG", 
-              style = "quantile", 
-              palette = "Blues")
-
-agedmap &lt;- tm_shape(mpsz_pop2020)+ 
-  tm_polygons("AGED", 
-              style = "quantile", 
-              palette = "Blues")
-
-tmap_arrange(youngmap, agedmap, asp=1, ncol=2)</code></pre>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>youngmap <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"YOUNG"</span>, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">style =</span> <span class="st">"quantile"</span>, </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> <span class="st">"Blues"</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>agedmap <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span> </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"AGED"</span>, </span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">style =</span> <span class="st">"quantile"</span>, </span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> <span class="st">"Blues"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(youngmap, agedmap, <span class="at">asp=</span><span class="dv">1</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HE07a_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1248"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="mappping-spatial-object-meeting-a-selection-criterion" class="level2">
 <h2 class="anchored" data-anchor-id="mappping-spatial-object-meeting-a-selection-criterion">4.7 Mappping Spatial Object Meeting a Selection Criterion</h2>
-<p>Instead of creating multiple small choropleth map, you can also use selection funtion to map spatial objects meeting the selection criterion.</p>
+<p>Instead of creating multiple small choropleth maps, you can also use selection function to map spatial objects meeting the selection criterion.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020[mpsz_pop2020<span class="sc">$</span>REGION_N<span class="sc">==</span><span class="st">"CENTRAL REGION"</span>, ])<span class="sc">+</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"DEPENDENCY"</span>, </span>
@@ -1033,7 +1051,7 @@ tmap_arrange(youngmap, agedmap, asp=1, ncol=2)</code></pre>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="HE07a_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1248"></p>
+<p><img src="HE07a_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1248"></p>
 </figure>
 </div>
 </div>
