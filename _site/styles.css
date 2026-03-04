@@ -46,3 +46,28 @@ table a{
   text-decoration:none;
   color:inherit;
 }
+
+/* ===== Scrollable navbar dropdown ===== */
+
+.navbar .dropdown-menu {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.navbar .dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.navbar .dropdown-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.navbar .dropdown-menu::-webkit-scrollbar-thumb {
+  background: #c8c8c8;
+  border-radius: 10px;
+}
+
+.navbar .dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
