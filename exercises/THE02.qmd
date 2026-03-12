@@ -1,0 +1,12 @@
+---
+title: "Take-home Exercise 2"
+subtitle: "Prototyping Modules for Visual Analytics Shiny Application"
+author: "Nazia Faruqui"
+date: 2026-03-09
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
