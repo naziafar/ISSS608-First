@@ -35,11 +35,11 @@ In this hands-on exercise, we will be installing and using the below network dat
 
 -   tidygraph,
 
--   ggraph and
+-   ggraph,
 
--   visNetwork.
+-   visNetwork,
 
--   [ggforce](https://ggforce.data-imaginist.com/)
+-   [ggforce](https://ggforce.data-imaginist.com/), and
 
 -   [concaveman](https://www.rdocumentation.org/packages/concaveman/versions/1.1.0/topics/concaveman)
 

@@ -10,3 +10,488 @@ execute:
   warning: false
   freeze: true
 ---
+
+# The Task
+
+In this take-home exercise, we are required to select one of the modules of our proposed Shiny application and complete the following tasks:
+
+-   To evaluate and determine whether the necessary R packages needed for our Shiny application are supported in **R CRAN**,
+
+-   To prepare and test the specific R codes can be run and return the correct visual output as expected,
+
+-   To determine the parameters and outputs that will be exposed on the Shiny applications, and
+
+-   To select the appropriate Shiny UI components for exposing the parameters determined above.
+
+# 1. Getting Started
+
+For this project, we will be looking at analysing and visualising the customer and transactions data of a Colombian Fintech company. I will be looking at the exploratory and confirmatory data analysis for the dataset.
+
+# 2. Installing and Loading R Packages
+
+The packages used for testing as part of this exercise include the below.
+
+```{r}
+pacman::p_load(tidyverse, ggstatsplot, plotly, ggiraph, ggdist, ggpubr, ggridges, ggmosaic, tidytext, wordcloud)
+```
+
+Two interactive visualisation packages were evaluated: **ggiraph** and **plotly**. The ggiraph package enables interactive elements such as tooltips while preserving the ggplot2 syntax, making it suitable for Shiny applications requiring custom hover information. The plotly package was also tested because it can convert ggplot objects into fully interactive visualisations with built-in zooming, panning, and hover functionality. Both packages successfully produced interactive visualisations; however, ggiraph offers greater control over tooltip formatting while plotly provides additional interactive features such as zooming and dynamic highlighting. **Therefore, both packages will be used in the project**. ggiraph will be applied in situations where customised tooltip content is required, while plotly will be used when its default interactive behaviour and simpler implementation are sufficient.
+
+Two packages were evaluated for statistical visualisation: **ggstatsplot** and **ggpubr**. While ggpubr provides functions for adding statistical test results to ggplot visualisations, ggstatsplot integrates visualisation, hypothesis testing, effect sizes, and confidence intervals within a single function. Due to this comprehensive functionality and ease of implementation, ggstatsplot was selected as the primary package for confirmatory data analysis.
+
+### Evaluation of packages
+
+| Package | Reason for selection |
+|--------------------|----------------------------------------------------|
+| tidyverse | Selected as the core package for data manipulation, cleaning, and visualisation (dplyr, ggplot2, tidyr) |
+| ggstatsplot | Selected because it automatically integrates statistical tests, effect sizes, and confidence intervals into visualisations, reducing the need for separate statistical coding. |
+| plotly | Selected because it automatically integrates statistical tests, effect sizes, and confidence intervals into visualisations, reducing the need for separate statistical coding. |
+| ggiraph | Selected for adding interactive visualisations with minimal code and built-in tooltips that display values when users hover over the plot. |
+| ggdist | Selected for advanced distribution visualisations such as raincloud plots and half-eye plots. |
+| ggridges | Selected for visualising ridge plots to visualise distributions across multiple groups |
+| ggmosaic | Selected for visualising mosaic plots for categorical vs categorical relationships |
+| tidytext | Selected for text analysis |
+| wordcloud | Wordcloud was used to visualise the text analysis in the form of a wordcloud, however due both text related variables having only few unique values, it did not present a good visual, hence not selected. |
+
+# 3. The Data
+
+We will be looking at the [**COFINFAD: Colombian Fintech Financial Analytics Dataset**](https://data.mendeley.com/datasets/mhb4zn3258/1) for this project. There are two csv files as part of this dataset - *customer_data.csv* and *transactions_data.csv.* The datasets are linked using the customer_id field. ***read_csv()*** function of **readr** package will be used to import the data into R.
+
+The transaction dataset will likely not be used in this project because the relevant transaction information has already been aggregated in the customer dataset. The customer dataset includes key summary variables such as the total number of transactions, average transaction value, total transaction volume, and the dates of the first and last transactions for each customer. Since these measures capture the overall transaction behaviour at the customer level, most of the required analyses can be conducted using this dataset alone.
+
+The transaction dataset mainly provides additional details such as the exact date of each individual transaction and the type of transaction (for example, payment, transfer, withdrawal, or deposit). However, this information does not appear to add significant value to the objectives of the current analysis, which focus on customer-level patterns rather than detailed transaction timelines.
+
+Therefore, the customer dataset will serve as the primary dataset for this project, while the transaction dataset is unlikely to be used unless more detailed transaction-level analysis becomes necessary.
+
+```{r}
+df <- read_csv("../data/customer_data.csv")
+```
+
+Upon importing, we need to first check whether the imported data is accurate and complete. To do that, we can go to the Environment tab in RStudio -\> click on df under Data, where we can see that there are 48723 rows and 54 columns, which is the same as the original excel file.
+
+Additionally, the `str()` function can also be used to check the above. It also gives us the data types of the variables.
+
+```{r}
+str(df)
+```
+
+Each row in the dataset represents an individual customer, while each columns describes different aspects of the customer’s profile and behaviour. The variables provide information across several key areas, including **demographic characteristics** (such as age, gender, location, income bracket, education level, and marital status), **financial product ownership** (for example savings accounts, credit cards, loans, investment accounts, and insurance products), and **digital engagement** (such as app login frequency and feature usage).
+
+In addition, the dataset includes **transaction-related metrics**, such as the number of transactions, average transaction value, total transaction volume, transaction frequency, and the dates of the first and last transactions. The dataset also captures **customer experience and satisfaction indicators**, including satisfaction scores, Net Promoter Score (NPS), app store ratings, and feedback sentiment. Finally, it provides **customer lifecycle and support information**, such as support tickets, complaint topics, customer tenure, churn probability, and estimated customer lifetime value. Together, these variables offer a comprehensive view of customer behaviour, engagement, and value.
+
+We also use `summary()` to examine the distribution of each variable and verify that the values fall within reasonable and expected ranges. This helps identify potential data quality issues such as invalid values, extreme outliers, or missing data.
+
+```{r}
+summary(df)
+```
+
+The summary output confirms that the values in the dataset fall within reasonable ranges for the respective variables. Demographic variables such as *age* and *household_size* show plausible minimum and maximum values, while transaction-related variables such as *tx_count*, *avg_tx_value*, and *total_tx_volume* contain positive values consistent with financial activity. Ratio-based variables, including *credit_utilization_ratio*, *resolved_tickets_ratio*, *weekend_transaction_ratio*, and *churn_probability*, fall between 0 and 1 as expected. Additionally, the summary indicates that most variables do not contain missing values, with the exception of *credit_utilization_ratio*, which contains some missing entries likely due to customers who do not hold credit cards. Overall, the results suggest that the dataset does not contain obvious invalid values and is suitable for further analysis.
+
+# 4. Data Wrangling
+
+## 4.1 Checking for missing values
+
+```{r}
+colSums(is.na(df))
+```
+
+Three variables contain missing data. The variable credit_utilization_ratio contains 18,263 missing values, which corresponds to customers who do not hold a credit card and therefore do not have a recorded utilization ratio. Additionally, feature_requests contains 16,115 missing values and complaint_topics contains 24,346 missing values. These missing values are expected, as not all customers provide feature requests or submit complaints. Since these missing values reflect the absence of feedback rather than data errors, they will be retained in the dataset for analysis.
+
+## 4.2 Checking for duplicates
+
+To ensure that each observation represents a unique customer, the dataset is checked for duplicate values in the customer_id variable. This is done using the duplicated() function in R to identify whether any customer IDs appear more than once. The results show that there are no duplicate *customer_id* values in the dataset, confirming that each row corresponds to a unique customer record.
+
+```{r}
+sum(duplicated(df$customer_id))
+```
+
+## 4.3 Converting variables
+
+Some variables in the dataset are converted to more appropriate data types to ensure they are handled correctly during analysis. Several categorical variables are originally stored as character variables and are converted to factor variables so that they are treated as categorical data rather than plain text. These variables include *gender*, *income_bracket*, *occupation*, *education_level*, *marital_status*, *acquisition_channel*, *customer_segment*, *feedback_sentiment*, *clv_segment*, and *preferred_transaction_type*. Converting these variables to factors allows them to be used more effectively in grouping, summarisation, and statistical modelling.
+
+In addition, the variable *customer_id* is converted from numeric to character format. Since this variable serves only as a unique identifier for each customer and is not used in numerical calculations, converting it to a character variable prevents it from being mistakenly treated as a quantitative variable during analysis.
+
+```{r}
+df$customer_id <- as.character(df$customer_id)
+
+df$gender <- as.factor(df$gender)
+df$income_bracket <- as.factor(df$income_bracket)
+df$occupation <- as.factor(df$occupation)
+df$education_level <- as.factor(df$education_level)
+df$marital_status <- as.factor(df$marital_status)
+df$acquisition_channel <- as.factor(df$acquisition_channel)
+df$customer_segment <- as.factor(df$customer_segment)
+df$feedback_sentiment <- as.factor(df$feedback_sentiment)
+df$clv_segment <- as.factor(df$clv_segment)
+df$preferred_transaction_type <- as.factor(df$preferred_transaction_type)
+df$location <- as.factor(df$location)
+```
+
+```{r}
+str(df)
+```
+
+::: callout-note
+The dataset contains two sets of transaction metrics. The variables *avg_tx_value*, *total_tx_volume, first_tx, last_tx* represent aggregated transaction behaviour derived from the transaction dataset. A second set of transaction-related variables (average_transaction_value, total_transaction_volume, first_transaction_date, last_transaction_date) appears to represent derived behavioural metrics and will not be used in the analysis to avoid duplication. Additionally, transaction_frequency and avg_daily_transactions both calculate the average number of transactions per day, hence only avg_daily_transactions will be used for analysis.
+:::
+
+# 5. Univariate Analysis
+
+For analyses involving a single variable, only **exploratory data analysis (EDA)** will be conducted. Univariate analysis focuses on understanding the distribution and characteristics of individual variables using visualisations such as histograms, density plots, and boxplots. Since there are no predefined reference values for these variables, confirmatory analysis is not applicable.
+
+### Demographics
+
+This section will examine the distribution of demographic variables that describe the characteristics of the customer base. The variables include *age*, *gender*, *location*, *income_bracket*, *education_level*, *marital_status*, *occupation*, and *household_size*.
+
+Possible plots:
+
+bar chart (all variables),
+
+histogram and boxplot (age, household_size)
+
+### Transaction behaviour
+
+This section explores variables related to customer financial activity. Key variables include *tx_count*, *avg_tx_value*, *total_tx_volume, preferred_transaction_type, avg_daily_transactions,* and *weekend_transaction_ratio.*
+
+Possible plots:
+
+histogram and density plot (avg_tx_value, total_tx_volume, avg_daily_transactions, weekend transaction ratio, tx_count),
+
+bar chart (preferred_transaction_type),
+
+boxplot (all variables except preferred_transaction_type)
+
+### Product ownership
+
+This section analyses the distribution of financial products held by customers. Relevant variables include *savings_account*, *credit_card*, *personal_loan*, *investment_account*, *insurance_product*, and *active_products*.
+
+Possible plot: bar chart
+
+### App Usage and Engagement
+
+This section examines variables related to customer interaction with the digital platform. These include *app_logins_frequency*, *feature_usage_diversity*, *bill_payment_user*, *auto_savings_enabled*.
+
+Possible plot: bar chart
+
+### Customer Satisfaction
+
+This section explores customer experience indicators including *satisfaction_score*, *nps_score*, *base_satisfaction, tx_satisfaction, product_satisfaction,* *app_store_rating*, *feedback_sentiment*.
+
+Possible plots:
+
+histogram (nps_score, base_satisfaction, tx_satisfaction, product_satisfaction, app_store_rating, satisfaction_score),
+
+bar chart (feedback_sentiment)
+
+boxplot (all variables except feedback_sentiment)
+
+### Testing the codes for the plots:
+
+1.  **Bar chart:**
+
+```{r}
+gender_counts <- df %>%
+  count(gender)
+
+ggplot(gender_counts, aes(x = gender, #input$demo
+                          y = n)) + 
+  geom_col(fill = "lightblue") + 
+  geom_text(aes(label = n),
+            vjust = -0.3) +
+  labs(
+    x = "Gender", 
+    y = "Number of Customers"
+  )
+```
+
+2.  **Histogram (Checking interactivity using ggiraph and plotly):**
+
+```{r}
+gg_hist <- ggplot(df, aes(x = avg_tx_value)) + #input$tran
+  geom_histogram_interactive(
+    aes(
+      tooltip = paste0(
+        "Count: ", after_stat(count),
+        "<br>Transaction Value Range: ",
+        round(after_stat(xmin), 0), " - ",
+        round(after_stat(xmax), 0)
+      )
+    ),
+    bins = 30,
+    boundary = 0,
+    fill = "lightblue",
+    color = "grey30"
+  ) +
+  labs(
+    title = "Distribution of Average Transaction Value",
+    x = "Average Transaction Value",
+    y = "Count"
+  )
+
+girafe(
+  ggobj = gg_hist,
+  width_svg = 8,
+  height_svg = 5
+)
+```
+
+```{r}
+p <- ggplot(df, aes(x = avg_tx_value)) +
+  geom_histogram(bins = 30,
+                 boundary = 0,
+                 fill = "lightblue",
+                 color = "grey30") +
+  labs(
+    title = "Distribution of Average Transaction Value",
+    x = "Average Transaction Value",
+    y = "Count"
+  )
+ggplotly(p)
+```
+
+3.  **Density Plot**
+
+```{r}
+p <- ggplot(df, aes(x = avg_tx_value)) +
+  geom_density(
+    fill = "lightblue",
+    alpha = 0.5,
+    color = "grey30"
+  ) +
+  labs(
+    title = "Density Distribution of Average Transaction Value",
+    x = "Average Transaction Value",
+    y = "Density"
+  )
+
+ggplotly(p)
+```
+
+4.  **Boxplot**
+
+```{r}
+ggplot(df, aes(x = "", y = app_store_rating)) +
+  geom_boxplot(fill = "lightblue") +
+  stat_summary(fun = median,
+               geom = "point",
+               colour = "red",
+               size = 4) +
+  labs(
+    y = "App Store Rating"
+  )
+```
+
+### Text Analysis
+
+Text analysis will be done using bar chart for the variables feature_requests and complaint_topics to understand the customers' sentiment towards the app.
+
+```{r}
+feature_data <- df %>%
+  select(feature_requests) %>%
+  filter(!is.na(feature_requests)) %>%
+  separate_rows(feature_requests, sep = ",")
+
+feature_data <- feature_data %>%
+  mutate(feature_requests = str_trim(feature_requests))
+
+feature_counts <- feature_data %>%
+  count(feature_requests, sort = TRUE)
+
+feature_counts %>%
+  slice_max(n, n = 10) %>%
+  ggplot(aes(x = reorder(feature_requests, n), y = n)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = n), 
+            hjust = -0.1, 
+            size = 4) +
+  coord_flip() +
+  labs(
+    title = "Most Requested Features",
+    x = "Feature Request",
+    y = "Frequency"
+  ) 
+```
+
+# 6. Bivariate Analysis
+
+For analyses involving relationships between multiple variables, both **exploratory and confirmatory analysis** will be performed. Two approaches will be evaluated: using **ggstatsplot**, which integrates statistical testing and visualisation within a single function, and using **ggpubr**, which allows statistical test results to be added separately to ggplot visualisations. The functionality and suitability of these approaches will be compared before deciding whether to implement one or both methods in the final application.
+
+## 6.1 Categorical vs Numerical Variables
+
+This will compare the values of a numeric variable across the categories of another variable.
+
+For example, average transaction value can be compared across income brackets to observe whether higher-income customers tend to perform higher-value transactions. Visualisations such as raincloud plots, violin plots, or boxplots will be explored to illustrate the distribution of values across categories. Ridgeline plots are also quite useful when the categories are many, for e.g. location.
+
+### Testing the code for raincloud plot (EDA):
+
+```{r}
+ggplot(df, aes(x = income_bracket,   #input$caty
+               y = avg_tx_value)) +  #input$numx
+     stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  coord_flip()
+```
+
+### Testing the code for CDA
+
+1.  Using ggpubr package
+
+```{r}
+ggboxplot(df,
+          x = "income_bracket",
+          y = "avg_tx_value",
+          fill = "income_bracket") +
+  stat_compare_means(method = "kruskal.test") + #input$catnumtest
+  stat_summary(
+  fun.data = ~mean_cl_normal(.x, conf.int = 0.99),  #input$catnumlevel
+  geom = "errorbar",
+  width = 0.2)
+```
+
+2.  Using ggstatsplot package
+
+```{r}
+ggbetweenstats(            
+  data = df,
+  x = income_bracket,
+  y = avg_tx_value,
+  type = "nonparametric",  #input$catnumtest
+  conf.level = 0.99        #input$catnumlevel
+)
+```
+
+Comparing the outputs of the two approaches, **ggstatsplot** provides richer statistical information directly within the visualisation. It displays the sample size for each group, the test statistic, p-value, and effect size, while also allowing the confidence interval level to be easily specified.
+
+### Testing the code for Ridgeline Plots (EDA):
+
+```{r}
+ggplot(df,
+       aes(x = avg_tx_value, 
+           y = location, 
+           fill = factor(after_stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  theme_ridges()
+```
+
+## 6.2 Numerical vs Numerical Variables
+
+When both variables are numeric, the objective is to examine whether a relationship exists between the two variables.
+
+For example, **application login frequency** and **monthly transaction count** may be related if customers who interact with the application more frequently also perform more transactions.
+
+Scatter plots will be used to visualise such relationships.
+
+### Testing the code for scatter plot (EDA):
+
+```{r}
+ggplot(df,
+       aes(x = app_logins_frequency,
+           y = monthly_transaction_count)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth()
+```
+
+### Testing the code for CDA:
+
+```{r}
+ggscatterstats(
+  data = df,
+  x = app_logins_frequency,
+  y = monthly_transaction_count,
+  marginal = FALSE
+)
+```
+
+## 6.3 Categorical vs Categorical Variables
+
+When both variables are categorical, the goal is to examine whether there is an association between the categories.
+
+For example, the relationship between **income bracket** and **preferred transaction type** may reveal whether customers with different income levels prefer different transaction behaviours.
+
+Bar charts and mosaic plots will be used to visualise such relationships.
+
+### Testing the code for bar chart (EDA):
+
+```{r}
+ggplot(df,
+       aes(x = income_bracket,
+           fill = preferred_transaction_type)) +
+  geom_bar(position = "fill") +
+  labs(y = "Proportion")
+```
+
+### Testing the code for mosaic plot (EDA):
+
+```{r}
+ggplot(data = df) +
+  geom_mosaic(
+    aes(x = product(income_bracket),
+        fill = preferred_transaction_type)
+  ) +
+  labs(
+    title = "Relationship Between Income Bracket and Preferred Transaction Type",
+    x = "Income Bracket",
+    y = "Proportion"
+  )
+```
+
+### Testing the code for CDA:
+
+```{r}
+ggbarstats(
+  data = df,
+  x = income_bracket,
+  y = preferred_transaction_type,
+  conf.level = 0.99
+)
+```
+
+# 7. UI Design for shiny app
+
+## Draft of proposed layout and features for Univariate Analysis EDA:
+
+![](/IMG_0236.jpg)
+
+For the univariate analysis exploration, the user will first be able to select the broad category of variable from demographic, transactions, products, app usage and satisfaction. Then they will only be allowed to select the variable whose distribution they want to visualise, not the type of chart.
+
+The naming convention used for the input Ids will be the first four letters of the type of variable from demographic, transactions, products, app usage and satisfaction. The PlotOutput will be named on the basis of the broad category the variable belongs to and the type of plot being returned (e.g. demoBox for demographic variable with a box plot)
+
+## Draft of proposed layout for Bivariate Analysis EDA and CDA combined:
+
+![](/IMG_0238.jpg)
+
+For the bivariate and multivariate analysis, the user will be allowed to run step 1 (EDA) on its own, and step 2 (CDA) only after step 1 has run.
+
+When clicking on bivariate, the user will first be able to select the type of variables they want to analyse - whether 1 categorical and 1 numerical, or 2 numerical variables, or 2 categorical variables.
+
+Following that, the parameters exposed are as follows:
+
+Variables - Variable 1 and Variable 2
+
+Statistical Test Selection - Parametric, Non-parametric
+
+Confidence Interval - 90%, 95%, 99%
+
+## Shiny UI Components Used:
+
+| Parameter | UI Component | Purpose |
+|------------------------|------------------------|------------------------|
+| Variable selection | selectInput() | Allows users to select variables for analysis |
+| Statistical test type | selectInput() | Select the type of statistical test to be done |
+| Confidence level | selectInput() or sliderInput() | Adjust the confidence level used in test |
+| Run analysis | actionButton() | Runs the analysis |
+| Graph display | plotOuput() | Displays the visualisation |
